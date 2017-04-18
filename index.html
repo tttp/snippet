@@ -14,20 +14,18 @@
     <div id="app" class="container" role="main">
       <div class="page-header"></div>
       <div class="row">
-        <div id="date" class="col-md-6">
+        <div id="date" class="col-md-6"><form>
           <div class="panel panel-default"><div class="panel-heading">{{ name }}
               <div class="btn-group" id="btn-generate"></div>
             </div>
             <div class="panel-body">
-
-              <form>
                 <div class="form-group">
                   <label for="text">Label</label>
-                  <input type="text" class="form-control" id="text" v-model="label">
+                  <input type="text" class="form-control" id="text" v-model="label" v-on:input="htmlg()">
                 </div>
                 <div class="form-group">
                   <label>Type</label>
-                  <select v-model="type" class="form-control">
+                  <select v-model="type" class="form-control"  v-on:change="htmlg()">
                     <option v-for="type in types" v-bind:value="type">
                     {{ type }}
                     </option>
@@ -35,7 +33,7 @@
                 </div>
                 <div class="form-group">
                   <label>Size</label>
-                  <select v-model="size" class="form-control">
+                  <select v-model="size"  v-on:change="htmlg()" class="form-control">
                     <option v-for="size in sizes" v-bind:value="size.value">
                     {{ size.text }}
                     </option>
@@ -43,15 +41,14 @@
                 </div>
             </div>
             <div class="panel-footer"><button id="copy" v-on:click.stop="copy">Copy</button><span class="text-success pull-right" v-if="copied">And paste it where due.</span></div>
-              </form>
           </div>
-        </div>
+        </form></div>
         <div class="col-md-6">
-          <h3>code<h3>
+          <h3>Result</h3>
               <div id="example" class="well">
-                <button class="btn"  v-bind:class="[ size, type ]">{{ label }}</button>
+                <button class="btn" v-bind:class="[ size, type ]">{{ label }}</button>
               </div>
-              <h3>html<h3>
+              <h3>Html Code</h3>
                   <textarea id="html" class="form-control">{{ html }}
                   </textarea>
 
@@ -63,31 +60,29 @@
 'use strict';
 
 
-
 var app = new Vue({
   el: '#app',
   data: {
     label: "click",
     copied: false,
+    html: "Use this form to generate a button",
     type:"btn-primary",
     size:"btn-lg",
     types: ["btn-default","btn-primary", "btn-success", "btn-warning","btn-danger","btn-info"],
     sizes: [{value:"btn-lg",text:"Large"},{value:"btn-md",text:"Medium"},{value:"btn-sm",text:"Small"},{value:"btn-xs",text:"French"}],
     name: 'Generate a button'
   },
-  computed: {
-    html: function () { 
-      return "Click on 'copy' when ready";
-      // does not work, compute too early...
-      //return $("#example").html();
-    }
-  },
+  
   methods: {
+    htmlg: function (ev) { 
+      Vue.nextTick(function () {
+        app.html = $("#example").html();
+        $("#html").val($("#example").html());
+      });
+    },
     copy: function() {
-      var snippet=$("#example").html(); 
-      $("textarea#html").val(snippet);
       var v=this;
-      clipboard.copy(snippet).then(
+      clipboard.copy(app.html).then(
         function(){v.copied=true;},
         function(err){console.log("failure", err);}
       );
