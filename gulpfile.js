@@ -11,7 +11,7 @@ var jsfiles = [
 'node_modules/jquery/dist/jquery.js',
 'node_modules/bootstrap/dist/js/bootstrap.js',
 'node_modules/vue/dist/vue.js',
-'node_modules/clipboard/dist/clipboard.js'
+'node_modules/clipboard-js/clipboard.js',
 ];
 var cssfiles = [
 'node_modules/bootstrap/dist/css/bootstrap.css',

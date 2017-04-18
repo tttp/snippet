@@ -42,7 +42,7 @@
                   </select>
                 </div>
             </div>
-            <div class="panel-footer"><button id="copy" v-on:click.stop="copy">Copy</button></div>
+            <div class="panel-footer"><button id="copy" v-on:click.stop="copy">Copy</button><span class="text-success pull-right" v-if="copied">And paste it where due.</span></div>
               </form>
           </div>
         </div>
@@ -52,7 +52,7 @@
                 <button class="btn"  v-bind:class="[ size, type ]">{{ label }}</button>
               </div>
               <h3>html<h3>
-                  <textarea class="form-control">So, well, click on "copy"
+                  <textarea id="html" class="form-control">{{ html }}
                   </textarea>
 
         </div>
@@ -61,25 +61,36 @@
 
     <script>
 'use strict';
+
+
+
 var app = new Vue({
   el: '#app',
   data: {
     label: "click",
-    type:"btn-default",
-    size:"btn-md",
+    copied: false,
+    type:"btn-primary",
+    size:"btn-lg",
     types: ["btn-default","btn-primary", "btn-success", "btn-warning","btn-danger","btn-info"],
     sizes: [{value:"btn-lg",text:"Large"},{value:"btn-md",text:"Medium"},{value:"btn-sm",text:"Small"},{value:"btn-xs",text:"French"}],
     name: 'Generate a button'
   },
   computed: {
-    html: function () { // does not work, compute too early...
-      return $("#example").html();
+    html: function () { 
+      return "Click on 'copy' when ready";
+      // does not work, compute too early...
+      //return $("#example").html();
     }
   },
   methods: {
-    copy: function() { 
-      $("textarea").val($("#example").html());
-      // do something to copy in the clipboard
+    copy: function() {
+      var snippet=$("#example").html(); 
+      $("textarea#html").val(snippet);
+      var v=this;
+      clipboard.copy(snippet).then(
+        function(){v.copied=true;},
+        function(err){console.log("failure", err);}
+      );
     }
   }
 });
