@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Generator</title>
+
+    <link href="dist/style.css" rel="stylesheet">
+    <script src="dist/all.js"></script>
+
+  </head>
+  <body>
+    <div id="app" class="container" role="main">
+      <div class="page-header"></div>
+      <div class="row">
+        <div id="date" class="col-md-6">
+          <div class="panel panel-default"><div class="panel-heading">{{ name }}
+              <div class="btn-group" id="btn-generate"></div>
+            </div>
+            <div class="panel-body">
+
+              <form>
+                <div class="form-group">
+                  <label for="text">Label</label>
+                  <input type="text" class="form-control" id="text" v-model="label">
+                </div>
+                <div class="form-group">
+                <label>Type</label>
+                <select v-model="type" class="form-control">
+                <option v-for="type in types" v-bind:value="type">
+{{ type }}
+</option>
+</select>
+</div>
+                <div class="form-group">
+                <label>Size</label>
+                <select v-model="size" class="form-control">
+                <option v-for="size in sizes" v-bind:value="size.value">
+{{ size.text }}
+</option>
+</select>
+</div>
+</div>
+<div class="panel-footer"><button id="copy" v-on:click.stop="copy">Copy</button></div>
+</form>
+</div>
+        </div>
+        <div class="col-md-6">
+          <h3>code<h3>
+          <div id="example" class="well">
+          <button class="btn"  v-bind:class="[ size, type ]">{{ label }}</button>
+          </div>
+          <h3>html<h3>
+          <textarea class="form-control">So, well, click on "copy"
+          </textarea>
+
+        </div>
+      </div>
+    </div>
+
+<script>
+  'use strict';
+  var app = new Vue({
+    el: '#app',
+    data: {
+      label: "click",
+      type:"btn-default",
+      size:"btn-md",
+      types: ["btn-default","btn-primary", "btn-success", "btn-warning","btn-danger","btn-info"],
+      sizes: [{value:"btn-lg",text:"Large"},{value:"btn-md",text:"Medium"},{value:"btn-sm",text:"Small"},{value:"btn-xs",text:"French"}],
+      name: 'Generate a button'
+    },
+    computed: {
+     html: function () { // does not work, compute too early...
+       return $("#example").html();
+       }
+     },
+     methods: {
+       copy: function() { 
+         $("textarea").val($("#example").html());
+// do something to copy in the clipboard
+       }
+     }
+  });
+  </script>
+  </body>
+</html>
+
