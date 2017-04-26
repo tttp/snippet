@@ -66,19 +66,21 @@
 <div class="form-group">
 <input :value="trackedUrl"  class="form-control" disabled>
 </div>
+<textarea class="hidden" id="mso">
+<!--[if mso]>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" :href="trackedUrl" :style="msostyle" arcsize="5%" :strokecolor="color" :fillcolor="color">
+<w:anchorlock/>
+<center style="color:#ffffff;font-family:Helvetica, Arial,sans-serif;font-size:16px;">{{ label }}</center>
+</v:roundrect>
+<![endif]-->
+</textarea>
               <div id="example" class="well">
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
       <div>
-        <!--[if mso]>
-          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" :href="trackedUrl" :style="msostyle" arcsize="5%" :strokecolor="color" :fillcolor="color">
-            <w:anchorlock/>
-            <center style="color:#ffffff;font-family:Helvetica, Arial,sans-serif;font-size:16px;">{{ label }}</center>
-          </v:roundrect>
-        <![endif]-->
-        <center><a :href="trackedUrl" :style="style" target="_blank">{{ label }}</a></center>
+        <span v-html="msoplaceholder"></span> <center><a :href="trackedUrl" :style="style" target="_blank">{{ label }}</a></center>
       </div>
     </td>
   </tr>
@@ -127,6 +129,7 @@ Vue.use(VueForm, {
 var app = new Vue({
   el: '#app',
   data: {
+    msoplaceholder:'<span id="msoplaceholder"></span>',
     formstate: {},
     utm_campaign: "en_"+today(),
     url: "",
@@ -169,10 +172,12 @@ var app = new Vue({
         return 'has-error';
       }
     },
-    htmlg: function (ev) { 
+    htmlg: function (ev) {
+      var p = this.msoplaceholder;
       Vue.nextTick(function () {
-        app.html = $("#example").html();
-        $("#html").val($("#example").html());
+        var html =  $("#example").html().replace(p,$("#mso").val().replace(/\r?\n|\r/g, ""));
+        app.html = html;
+        $("#html").val(html);
       });
     },
     copy: function() {
