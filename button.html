@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Generator</title>
+
+    <link href="dist/style.css" rel="stylesheet">
+    <script src="dist/all.js"></script>
+
+  </head>
+  <body>
+    <div id="app" class="container" role="main">
+      <div class="page-header"></div>
+      <div class="row">
+        <div id="date" class="col-md-6"><form>
+          <div class="panel panel-default"><div class="panel-heading">{{ name }}
+              <div class="btn-group" id="btn-generate"></div>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                  <label for="text">Label</label>
+                  <input type="text" class="form-control" id="text" v-model="label" v-on:input="htmlg()">
+                </div>
+                <div class="form-group">
+                  <label>Type</label>
+                  <select v-model="type" class="form-control"  v-on:change="htmlg()">
+                    <option v-for="type in types" v-bind:value="type">
+                    {{ type }}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Size</label>
+                  <select v-model="size"  v-on:change="htmlg()" class="form-control">
+                    <option v-for="size in sizes" v-bind:value="size.value">
+                    {{ size.text }}
+                    </option>
+                  </select>
+                </div>
+            </div>
+            <div class="panel-footer"><button id="copy" v-on:click.stop="copy">Copy</button><span class="text-success pull-right" v-if="copied">And paste it where due.</span></div>
+          </div>
+        </form></div>
+        <div class="col-md-6">
+          <h3>Result</h3>
+              <div id="example" class="well">
+                <button class="btn" v-bind:class="[ size, type ]">{{ label }}</button>
+              </div>
+              <h3>Html Code</h3>
+                  <textarea id="html" class="form-control">{{ html }}
+                  </textarea>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+'use strict';
+
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    label: "click",
+    copied: false,
+    html: "Use this form to generate a button",
+    type:"btn-primary",
+    size:"btn-lg",
+    types: ["btn-default","btn-primary", "btn-success", "btn-warning","btn-danger","btn-info"],
+    sizes: [{value:"btn-lg",text:"Large"},{value:"btn-md",text:"Medium"},{value:"btn-sm",text:"Small"},{value:"btn-xs",text:"French"}],
+    name: 'Generate a button'
+  },
+  
+  methods: {
+    htmlg: function (ev) { 
+      Vue.nextTick(function () {
+        app.html = $("#example").html();
+        $("#html").val($("#example").html());
+      });
+    },
+    copy: function() {
+      var v=this;
+      clipboard.copy(app.html).then(
+        function(){v.copied=true;},
+        function(err){console.log("failure", err);}
+      );
+    }
+  }
+});
+    </script>
+  </body>
+</html>
+
