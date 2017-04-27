@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Generator</title>
+    <title>html for button in email Generator</title>
+<!-- inject:head:html -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,10 +10,32 @@
     <link href="dist/style.css" rel="stylesheet">
     <script src="dist/all.js"></script>
 
+
+<!-- endinject -->
+</head>
+<body>
+
   </head>
   <body>
+<!-- inject:nav:html -->
+<nav class = "navbar navbar-default" role = "navigation">
+<div class="container-fluid">
+   
+   <div class = "navbar-header">
+      <a class = "navbar-brand" href = "/">Code snippets</a>
+   </div>
+   
+   <div>
+      <ul class = "nav navbar-nav">
+         <li><a href ="mailbutton.html">Button in email</a></li>
+      
+      </ul>
+   </div>
+</div>
+</nav>
+
+<!-- endinject -->
     <div id="app" class="container" role="main">
-      <div class="page-header"></div>
       <div class="row">
         <div id="date" class="col-md-6"><vue-form v-on:submit.prevent="copy" :state="formstate">
           <div class="panel panel-default"><div class="panel-heading">{{ name }}

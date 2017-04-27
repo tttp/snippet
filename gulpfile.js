@@ -25,7 +25,7 @@ var cssfiles = [
 //node_modules/jquery/dist/jquery.js
 
 gulp.task('partial', function() {
-gulp.src('index.html')
+gulp.src('*.html')
   .pipe(inject(gulp.src(['partial/head.html']), {
     starttag: '<!-- inject:head:{{ext}} -->',
     transform: function (filePath, file) {
