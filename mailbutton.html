@@ -28,10 +28,11 @@
                 </validate>
                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.url)">
                   <label for="url" class="control-label">Url</label>
-                  <input type="url" placeholder="https://act.wemove.eu/..." required class="form-control" name="url" v-model="url" v-on:input="htmlg()">
+                  <input type="url" placeholder="https://act.wemove.eu/..." required class="form-control" name="url" v-model="url" https-only v-on:input="htmlg()">
                   <field-messages name="url" show="$touched || $submitted" class="help-block">
                     <span slot="required">You know a call to action should go somewhere, right?</span>
                      <div slot="url">This is not a valid url. you know, it should start with https://www.wemove.eu...</div>
+                     <div slot="https-only">Dude! Security and privacy matter! It must start with https...</div>
                   </field-messages>
                 </validate>                
                 <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.label)">
@@ -119,6 +120,11 @@ var today= function () {
 };
 
 Vue.use(VueForm, {
+  validators: {
+    'https-only': function (value, attrValue, vnode) {
+      return (value.indexOf("https://") == 0);
+    }
+  },
   inputClasses: {
     valid: 'form-control-success',
     invalid: 'form-control-danger'
@@ -138,8 +144,8 @@ var app = new Vue({
     html: "set the url, and click on copy. you can then paste your html code in civimail ",
     size:"300px",
     color: "#189bb3",
-    colors: [{value:"#189bb3",text:"Teal"},{value:"#931c80",text:"Purple"},{value:"#E67900",text:"Orange"}],
-    sizes: [{value:"100px",text:"100"},{value:"200px",text:"200"},{value:"300px",text:"300"},{value:"500px",text:"500px"},{value:"60%",text:"60% -warning, you need to test in your email"}],
+    colors: [{value:"#189bb3",text:"Teal",border:"#327F9B"},{value:"#931c80",text:"Purple",border:"#7e176d"},{value:"#E67900",text:"Orange"}],
+    sizes: [{value:"100px",text:"100 pixels"},{value:"200px",text:"200 pixels"},{value:"300px",text:"300 pixels"},{value:"500px",text:"500 pixels"},{value:"60%",text:"60% -warning, you need to test in your email"}, {value:"90%",text:"90% -warning, you need to test in your email"}],
     name: 'Generate a button'
   },
   computed: {
