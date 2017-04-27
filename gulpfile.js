@@ -40,7 +40,7 @@ gulp.src('index.html')
       return file.contents.toString('utf8')
     }
   }))
-  .pipe(gulp.dest('./dist'));
+  .pipe(gulp.dest('./'));
 });
 
 
