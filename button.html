@@ -1,28 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <title>Generator for buttons to use on the site</title>
+
+<!-- inject:head:html -->
+            <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Generator</title>
 
     <link href="dist/style.css" rel="stylesheet">
     <script src="dist/all.js"></script>
 
+        <!-- endinject -->
+<style>
+/*$brand-primary:       #96c120; //green
+$brand-success:         #5cb85c; //green
+$brand-info:            #931d80; //#05b1b2; //tile
+//$brand-info-light:           mix($brand-info,#fff,50%);
+$brand-info-light:      #f1e50c;
+$brand-warning:         #f77300;//orange
+$brand-danger:          #da0000;//red
+*/
+#example .btn-primary {background:#941b80;}
+#example .btn-success{background:#5cb85c;}
+#example .btn-info{background:#82d8d9;}
+#example .btn-warning{background:#f77300;}
+#example .btn-danger{background:#da0000;}
+#example a {border: 0px;}
+
+</style>
+</head>
+<body>
+
   </head>
   <body>
+<!-- inject:nav:html -->
+    <nav class = "navbar navbar-default" role = "navigation">
+<div class="container-fluid">
+   
+   <div class = "navbar-header">
+      <a class = "navbar-brand" href = "index.html">Code snippets</a>
+   </div>
+   
+   <div>
+      <ul class = "nav navbar-nav">
+         <li><a href ="mailbutton.html">Button in email</a></li>
+         <li><a href ="button.html">Button in website</a></li>
+      
+      </ul>
+   </div>
+</div>
+</nav>
+
+    <!-- endinject -->
+
     <div id="app" class="container" role="main">
       <div class="page-header"></div>
       <div class="row">
-        <div id="date" class="col-md-6"><form>
+        <div class="col-md-6"><vue-form v-on:submit.prevent="copy" :state="formstate">
           <div class="panel panel-default"><div class="panel-heading">{{ name }}
               <div class="btn-group" id="btn-generate"></div>
             </div>
             <div class="panel-body">
-                <div class="form-group">
-                  <label for="text">Label</label>
-                  <input type="text" class="form-control" id="text" v-model="label" v-on:input="htmlg()">
-                </div>
+ <vue-instant :suggestions="suggestions.medium" name="utm_medium"  v-model="utm_medium" suggestion-attribute="t"></vue-instant>
+
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm)">
+                  <label class="control-label" for="utm">utm campaign</label>
+                  <input type="text" required class="form-control" name="utm" id="utm" v-model="utm_campaign" v-on:input="htmlg()">
+                  <field-messages name="utm" show="$touched || $submitted" class="help-block">
+                    <span slot="required">utm is a required field</span>
+                  </field-messages>
+                </validate>
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.url)">
+                  <label for="url" class="control-label">Url (without tracking params)</label>
+                  <input type="url" placeholder="https://act.wemove.eu/..." required class="form-control" name="url" v-model="url" https-only v-on:input="htmlg()">
+                  <field-messages name="url" show="$touched || $submitted" class="help-block">
+                    <span slot="required">You know a call to action should go somewhere, right?</span>
+                     <div slot="url">This is not a valid url. you know, it should start with https://www.wemove.eu...</div>
+                     <div slot="https-only">Dude! Security and privacy matter! It must start with https...</div>
+                  </field-messages>
+                </validate>                
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.label)">
+                  <label class="control-label" for="text">Label</label>
+                  <input  required type="text" class="form-control" name="label" v-model="label" v-on:input="htmlg()">
+                  <field-messages name="label" show="$touched || $submitted" class="help-block">
+                    <span slot="required">Really? without a label?!</span>
+                  </field-messages>
+                </validate>                
                 <div class="form-group">
                   <label>Type</label>
                   <select v-model="type" class="form-control"  v-on:change="htmlg()">
@@ -45,8 +109,10 @@
         </form></div>
         <div class="col-md-6">
           <h3>Result</h3>
+<input :value="trackedUrl"  class="form-control" readonly>
               <div id="example" class="well">
-                <button class="btn" v-bind:class="[ size, type ]">{{ label }}</button>
+
+                <a :href="trackedUrl" class="btn" v-bind:class="[ size, type ]">{{ label }}</a>
               </div>
               <h3>Html Code</h3>
                   <textarea id="html" class="form-control">{{ html }}
@@ -59,11 +125,48 @@
     <script>
 'use strict';
 
+var today= function () {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+
+  if(dd<10) {
+      dd='0'+dd
+  } 
+
+  if(mm<10) {
+      mm='0'+mm
+  } 
+
+  return yyyy+mm+dd;
+};
+
+Vue.use(VueInstant);
+
+Vue.use(VueForm, {
+  validators: {
+    'https-only': function (value, attrValue, vnode) {
+      return (value.indexOf("https://") == 0);
+    }
+  },
+  inputClasses: {
+    valid: 'form-control-success',
+    invalid: 'form-control-danger'
+  }
+});
+
 
 var app = new Vue({
   el: '#app',
   data: {
     label: "click",
+    formstate: {},
+    suggestions: {"medium":[{'t':'email'},{'t':'facebook'},{'t':'twitter'},{'t':'partner'},{t:'wemove.eu'}]},
+    url: "",
+    utm_campaign: "en_"+today(),
+    utm_medium: "website",
+    utm_source: "WeMove.EU",
     copied: false,
     html: "Use this form to generate a button",
     type:"btn-primary",
@@ -72,8 +175,24 @@ var app = new Vue({
     sizes: [{value:"btn-lg",text:"Large"},{value:"btn-md",text:"Medium"},{value:"btn-sm",text:"Small"},{value:"btn-xs",text:"French"}],
     name: 'Generate a button'
   },
-  
+  computed: {
+    trackedUrl: function () {
+      var separator  = this.url.indexOf("?") === -1 ? "?" : "&";
+      return this.url + separator + "utm_campaign=" + this.utm_campaign;
+    },
+  }, 
   methods: {
+    fieldClassName: function (field) {
+      if(!field) {
+        return '';
+      }
+      if((field.$touched || field.$submitted) && field.$valid) {
+        return 'has-success';
+      }
+      if((field.$touched || field.$submitted) && field.$invalid) {
+        return 'has-error';
+      }
+    },
     htmlg: function (ev) { 
       Vue.nextTick(function () {
         app.html = $("#example").html();

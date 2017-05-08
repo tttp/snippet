@@ -14,12 +14,14 @@ var jsfiles = [
 'node_modules/bootstrap/dist/js/bootstrap.js',
 'node_modules/vue/dist/vue.js',
 'node_modules/vue-form/dist/vue-form.js',
+'node_modules/vue-instant/dist/vue-instant.browser.js',
 'node_modules/clipboard-js/clipboard.js',
 ];
 
 var cssfiles = [
 'node_modules/bootstrap/dist/css/bootstrap.css',
 'node_modules/bootstrap/dist/css/bootstrap-theme.css',
+'node_modules/vue-instant/dist/vue-instant.css',
 ];
 //node_modules/bootstrap/dist/css/bootstrap
 //node_modules/jquery/dist/jquery.js
