@@ -91,13 +91,13 @@
 <input :value="trackedUrl"  class="form-control" disabled>
 </div>
 <textarea class="hidden" id="mso">
+</textarea>
 <!--[if mso]>
 <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" :href="trackedUrl" :style="msostyle" arcsize="5%" :strokecolor="color" :fillcolor="color">
 <w:anchorlock/>
 <center style="color:#ffffff;font-family:Helvetica, Arial,sans-serif;font-size:16px;">{{ label }}</center>
 </v:roundrect>
 <![endif]-->
-</textarea>
               <div id="example" class="well">
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -162,7 +162,7 @@ var app = new Vue({
     formstate: {},
     utm_campaign: "en_"+today(),
     url: "",
-    label: "Call to action... click now!",
+    label: "Call to action... Now!",
     copied: false,
     html: "set the url, and click on copy. you can then paste your html code in civimail ",
     size:"300px",

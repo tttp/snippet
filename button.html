@@ -62,9 +62,22 @@ $brand-danger:          #da0000;//red
               <div class="btn-group" id="btn-generate"></div>
             </div>
             <div class="panel-body">
- <vue-instant :suggestions="suggestions.medium" name="utm_medium"  v-model="utm_medium" suggestion-attribute="t"></vue-instant>
 
-                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm)">
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm_medium)">
+                  <label class="control-label" for="utm_medium">utm medium</label>
+                  <input type="text" required class="form-control" name="utm" id="utm_medium" v-model="utm_medium" v-on:input="htmlg()">
+                  <field-messages name="utm" show="$touched || $submitted" class="help-block">
+                    <span slot="required">utm is a required field</span>
+                  </field-messages>
+                </validate>
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm_source)">
+                  <label class="control-label" for="utm">utm source</label>
+                  <input type="text" required class="form-control" name="utm" id="utm" v-model="utm_source" v-on:input="htmlg()">
+                  <field-messages name="utm" show="$touched || $submitted" class="help-block">
+                    <span slot="required">utm is a required field</span>
+                  </field-messages>
+                </validate>
+                <validate auto-label class="form-group required-field" :class="fieldClassName(formstate.utm_campaign)">
                   <label class="control-label" for="utm">utm campaign</label>
                   <input type="text" required class="form-control" name="utm" id="utm" v-model="utm_campaign" v-on:input="htmlg()">
                   <field-messages name="utm" show="$touched || $submitted" class="help-block">
@@ -160,7 +173,7 @@ Vue.use(VueForm, {
 var app = new Vue({
   el: '#app',
   data: {
-    label: "click",
+    label: "Take action now",
     formstate: {},
     suggestions: {"medium":[{'t':'email'},{'t':'facebook'},{'t':'twitter'},{'t':'partner'},{t:'wemove.eu'}]},
     url: "",
@@ -178,7 +191,7 @@ var app = new Vue({
   computed: {
     trackedUrl: function () {
       var separator  = this.url.indexOf("?") === -1 ? "?" : "&";
-      return this.url + separator + "utm_campaign=" + this.utm_campaign;
+      return this.url + separator + "utm_campaign=" + this.utm_campaign+"&"+"utm_medium=" + this.utm_medium+"&utm_source=" + this.utm_source;
     },
   }, 
   methods: {
